@@ -4,14 +4,20 @@ import { useNavigate } from "react-router-dom";
 import { signup } from "../../services/authentication";
 
 export function SignupPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [userInfo, setUserInfo] = useState({
+    email: '',
+    password: '',
+    username: '',
+    firstname: '',
+    lastname: ''
+  })
+
   const navigate = useNavigate();
 
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      await signup(email, password);
+      await signup(userInfo);
       navigate("/login");
     } catch (err) {
       console.error(err);
@@ -19,13 +25,10 @@ export function SignupPage() {
     }
   }
 
-  function handleEmailChange(event) {
-    setEmail(event.target.value);
-  }
 
-  function handlePasswordChange(event) {
-    setPassword(event.target.value);
-  }
+  const handleInputChanges = (e) => {
+    setUserInfo({...userInfo, [e.target.name]: e.target.value})
+  } 
 
   return (
     <>
@@ -35,16 +38,46 @@ export function SignupPage() {
         <input
           id="email"
           type="text"
-          value={email}
-          onChange={handleEmailChange}
+          name='email'
+          value={userInfo.email}
+          placeholder="email"
+          onChange={handleInputChanges}
         />
         <label htmlFor="password">Password:</label>
         <input
           placeholder="Password"
           id="password"
           type="password"
-          value={password}
-          onChange={handlePasswordChange}
+          name='password'
+          value={userInfo.password}
+          onChange={handleInputChanges}
+        />
+        <label htmlFor="username">Username:</label>
+        <input
+          placeholder="username"
+          id="username"
+          type="text"
+          name='username'
+          value={userInfo.username}
+          onChange={handleInputChanges}
+        />
+        <label htmlFor="firstname">First Name:</label>
+        <input
+          placeholder="firsname"
+          id="firstname"
+          type="text"
+          name='firstname'
+          value={userInfo.firstname}
+          onChange={handleInputChanges}
+        />
+        <label htmlFor="lastname">Last Name:</label>
+        <input
+          placeholder="lastname"
+          id="lastname"
+          type="text"
+          name='lastname'
+          value={userInfo.lastname}
+          onChange={handleInputChanges}
         />
         <input role="submit-button" id="submit" type="submit" value="Submit" />
       </form>
