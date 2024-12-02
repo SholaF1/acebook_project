@@ -51,10 +51,13 @@ async function deleteUser(req, res) {
       return res.status(401).json({ message: "Forbidden! You can only delete your own account!" });
   }
 
-    const deletedUser = await User.findByIdAndDelete(userToDeleteId)
+  await Post.deleteMany({ user_id: userToDeleteId })
+  await Comment.deleteMany({ userId: userToDeleteId })
 
-    if (!deletedUser) {
-      return res.status(404).json({ message: "User not found" });
+  const deletedUser = await User.findByIdAndDelete(userToDeleteId)
+
+  if (!deletedUser) {
+    return res.status(404).json({ message: "User not found" });
   }
   res.status(200).json({message: "User deleted", user: deletedUser}) 
 } catch (err) {
